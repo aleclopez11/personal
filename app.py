@@ -17,8 +17,10 @@ def home():
     print(stock_info)
     print(type(stock_info))
     output = ''
-    for key in stock_info.values():
-        output += key + '<br>' + stock_info[key] + '<br>'
+    for key in stock_info:
+        output += f'<br>${key}:<br>' 
+        for values in stock_info[key]:
+            output += f'{values}: {stock_info[key][values]}<br>'
     return(f'app homepage <br>{output}')
 
 if __name__ == '__main__':

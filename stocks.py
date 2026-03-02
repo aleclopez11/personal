@@ -2,19 +2,6 @@ import yfinance
 import json
 
 
-test = yfinance.Ticker('GOOGL')
-
-print(test)
-# print(test.info)
-keys = ['calendar', 'info', 'financials', 'earnings', 'earnings_dates']
-print(test.calendar)
-print(test.financials)
-print(test.earnings_dates)
-
-out = test.info
-for key in out:
-    print(key)
-
 
 def retrieve_stocks():
     stocks = json.load(open('settings.json'))
@@ -42,8 +29,19 @@ def get_stock_info(ticker):
     for key in keys:
         try:
             output[key] = stock[key]
+            # output.append(f'{key}: {stock[key]}')
         except:
             pass
-
-    print(f'heres the output {output}')
+    output['trend'] = current_trend(output)
     return output
+
+def current_trend(ticker):
+    
+    previous_close = ticker['previousClose']
+    current = ticker['currentPrice']
+
+    diff = current - previous_close
+
+    trend = diff / previous_close * 100
+
+    return f'{trend:.2f}'
