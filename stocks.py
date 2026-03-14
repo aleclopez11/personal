@@ -4,27 +4,24 @@ import json
 
 
 def retrieve_stocks():
-    stocks = json.load(open('settings.json'))
+    config = json.load(open('settings.json'))
+    stocks = config['stocks']
+    keys = config['keys']
 
     output = {}
 
-    for stock in stocks['stocks']:
+    for stock in stocks:
         print('getting info')
-        output[stock] = get_stock_info(stock)
+        output[stock] = get_stock_info(stock, keys)
 
     return output
 
-def get_stock_info(ticker):
+def get_stock_info(ticker, keys):
     stock = yfinance.Ticker(ticker)
     print(stock)
     output = {}
 
     stock = stock.info
-
-    keys = ['previousClose', 'open', 'dayLow', 'dayHigh', 'dividendRate', 'dividendYield', 'volume', 'averageVolume', 'averageVolume10days',
-            'bid', 'ask', 'marketCap', 'fiftyTwoWeekLow', 'fiftyTwoWeekHigh', 'allTimeHigh', 'profitMargins', 'floatShares', 'sharesOutstanding',
-            'sharesShort', 'shortRatio', 'currentPrice', 'targetHighPrice', 'targetLowPrice', 'targetMedianPrice', 'totalCash', 'ebitda',
-            'totalDebt', 'quickRatio', 'currentRatio', 'totalRevenue', 'grossProfits', 'freeCashflow']
 
     for key in keys:
         try:

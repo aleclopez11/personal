@@ -1,3 +1,9 @@
 {
-    "stocks": ["AAPL", "GOOGL", "NVDA", "AMZN", "FSLR", "PEG"]
+    "stocks": ["AAPL", "GOOGL", "NVDA", "AMZN", "FSLR", "PEG"],
+    "keys": ["previousClose", "open", "dayLow", "dayHigh", "dividendRate", "dividendYield", "volume", "averageVolume", "averageVolume10days",
+    "bid", "ask", "marketCap", "fiftyTwoWeekLow", "fiftyTwoWeekHigh", "allTimeHigh", "profitMargins", "floatShares", "sharesOutstanding",
+    "sharesShort", "shortRatio", "currentPrice", "targetHighPrice", "targetLowPrice", "targetMedianPrice", "totalCash", "ebitda",
+    "totalDebt", "quickRatio", "currentRatio", "totalRevenue", "grossProfits", "freeCashflow"],
+    "tasks": ["go to the gym", "get groceries", "run"],
+    "task_keys": ["task", "date"]
 }
