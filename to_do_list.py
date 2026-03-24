@@ -30,3 +30,8 @@ def delete_task(task):
     with open('settings.json', 'w') as f:
         json.dump(config, f, indent=4)
 
+def change_task_details(task, key, details):
+    config = json.load(open('settings.json'))
+    task[key] = details
+    config[task] = task
+
