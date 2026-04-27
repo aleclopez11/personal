@@ -1,11 +1,37 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import axios from 'axios'
+
 
 function App() {
   const [count, setCount] = useState(0)
+  const [stock_data, getStockData] = useState({})
+
+  useEffect(() => {
+    console.log('useEffect called');
+    const socket = new WebSocket('ws://127.0.0.1:8000/ws');
+    console.log('WebSocket connection established');
+
+    socket.onopen = () => {
+      console.log('WebSocket connection opened');
+    }
+    socket.onmessage = (event) => {
+      console.log('message received')
+      const data = JSON.parse(event.data);
+      console.log(data);
+    }
+    return () => {socket.close()};
+  }, []);
+
+  const sendMessae = () => {
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ message: 'Hello from React!' }));
+    }
+  }
+
 
   return (
     <>
@@ -23,10 +49,18 @@ function App() {
         </div>
         <button
           className="counter"
-          onClick={() => setCount((count) => count + 1)}
+          // onClick={() => setCount((count) => count + 1)}
+          onClick={() => axios.get('http://127.0.0.1:8000/stocks').then(
+            (response) => {
+              // const data = response.json();
+            getStockData(response.data)
+          })}
         >
           Count is {count}
         </button>
+        <div>
+          <pre>Stock Data: {JSON.stringify(stock_data, null, 2)}</pre>          
+        </div>
       </section>
 
       <div className="ticks"></div>
