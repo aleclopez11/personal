@@ -58,10 +58,10 @@ async def websocket_endpoint(websocket: WebSocket):
         # data = await websocket.receive_text()
         data = await refresh_data()
         print(f'Received data from client: {data}')
-        if data != {}:
+        # if data != {}:
             # response = f'Server received: {data}'
             # await websocket.send_text(data)
-            await websocket.send_json(data)
+        await websocket.send_json(data)
         await asyncio.sleep(300)  # Sleep for 5 minutes if no data is available
         
 
