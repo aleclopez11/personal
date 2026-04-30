@@ -22,6 +22,9 @@ function App() {
       console.log('message received')
       const data = JSON.parse(event.data);
       console.log(data);
+      if (data.length > 0) {
+        getStockData(data);
+      }
     }
     return () => {socket.close()};
   }, []);
@@ -59,7 +62,7 @@ function App() {
           Count is {count}
         </button>
         <div>
-          <pre>Stock Data: {JSON.stringify(stock_data, null, 2)}</pre>          
+          {/* <pre>Stock Data: {JSON.stringify(stock_data, null, 2)}</pre>           */}
         </div>
       </section>
 
@@ -148,6 +151,42 @@ function App() {
 
       <div className="ticks"></div>
       <section id="spacer"></section>
+      <h2>Stock Data</h2>
+      <table>
+    <thead>
+      <tr>
+        <th>Symbol</th>
+        <th>Price</th>
+        <th>open</th>
+        <th>prev close</th>
+        <th>change</th>
+        <th>revenue (millions)</th>
+        <th>profitMargins</th>
+        <th>volume</th>
+
+
+        {/* Add more columns as needed */}
+      </tr>
+    </thead>
+    <tbody>
+    {Object.entries(stock_data).map(([key, item]) => (
+  console.log(key, item),
+  <tr key={key}>
+    <td>{key}</td>
+    <td>{item.currentPrice}</td>
+    <td>{item.open}</td>
+    <td>{item.previousClose}</td>
+    <td>{item.trend}%</td>
+    <td>{(item.totalRevenue/ 1000000).toFixed(2)}</td>
+    <td>{(item.profitMargins * 100).toFixed(2) + '%'}</td>
+    <td>{item.volume.toLocaleString()}</td>
+    {/* Add more cells as needed */}
+  </tr>
+))}
+    </tbody>
+  </table>
+  <br />
+  <section id="spacer"></section>
     </>
   )
 }
