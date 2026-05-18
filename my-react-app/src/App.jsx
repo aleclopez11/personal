@@ -9,6 +9,12 @@ import axios from 'axios'
 function App() {
   const [count, setCount] = useState(0)
   const [stock_data, getStockData] = useState({})
+  const [user, setUser] = useState({
+    username: 'Alec',
+    email: 'test',
+    id: 1
+  })
+  const [refresh, setRefresh] = useState(null)
 
   useEffect(() => {
     console.log('useEffect called');
@@ -23,7 +29,13 @@ function App() {
       const data = JSON.parse(event.data);
       console.log(data);
       if (data.length > 0) {
+        console.log('data received from websocket')
         getStockData(data);
+        setRefresh(new Date().toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        }));
       }
     }
     return () => {socket.close()};
@@ -52,11 +64,21 @@ function App() {
         </div>
         <button
           className="counter"
-          // onClick={() => setCount((count) => count + 1)}
-          onClick={() => axios.get('http://127.0.0.1:8000/stocks').then(
+          // onClick={() => setCount((count) => count + 1)} , {"data": username.name}
+          onClick={() => axios.get('http://127.0.0.1:8000/stocks', {
+            "params": {
+              "username": user.username
+            }
+          })
+          .then(
             (response) => {
               // const data = response.json();
-            getStockData(response.data)
+            getStockData(response.data);
+            setRefresh(new Date().toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true
+            }));
           })}
         >
           Count is {count}
@@ -152,6 +174,7 @@ function App() {
       <div className="ticks"></div>
       <section id="spacer"></section>
       <h2>Stock Data</h2>
+      <h3>Data refreshed: {refresh}</h3>
       <table>
     <thead>
       <tr>

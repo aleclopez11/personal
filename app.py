@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 import stocks
 import datetime
 import to_do_list
+import models
 
 async def refresh_data():
     # while True:
@@ -17,7 +18,7 @@ async def refresh_data():
     end_time = datetime.time(16, 0)    # 4:00 PM
     if weekday < 5 and (start_time <= time <= end_time):
         print('refreshing data')
-        stock_info = stocks.retrieve_stocks()
+        stock_info = stocks.retrieve_stocks(user = 'default')
     # await asyncio.sleep(300)  # Refresh every 5 minutes (300 seconds)
     # stock_info = stocks.retrieve_stocks()
 
@@ -85,8 +86,10 @@ def home():
     # return stock_info
 
 @app.get('/stocks')
-def get_stocks():
-    stock_info = stocks.retrieve_stocks()
+def get_stocks(username: str):
+    print("GETTING STOCK HERES THE USER")
+    print(username)
+    stock_info = stocks.retrieve_stocks(username)
     print(type(stock_info))
     print(stock_info)
     print('api hit')
@@ -96,6 +99,21 @@ def get_stocks():
 def post_task(task: str):
     to_do_list.add_task(task)
     return f'task {task} added'
+
+@app.get('/getTasks')
+def get_task():
+    tasks = to_do_list.get_tasks()
+    return tasks
+
+@app.post('/deleteTask')
+def delete_task(task: str):
+    to_do_list.delete_task(task)
+    return f'task {task} deleted'
+
+@app.post('/changeTaskDetails')
+def change_task_details(task: str, key: str, details: str):
+    to_do_list.change_task_details(task, key, details)
+    return f'task {task} details changed'
 
 # if __name__ == '__main__':
 #     app.run()
